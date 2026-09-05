@@ -1,7 +1,9 @@
 // The Marvellous Mossley theme stylesheet, moved out of core
-// (was app/assets/stylesheets/themes/custom/mossley.scss). Unchanged except
-// for the import path and the background image URLs, which now name assets
-// this engine ships rather than files core served from public/.
+// (was app/assets/stylesheets/themes/custom/mossley.scss). Three changes from
+// what core built: the import path; the background image URLs, which now name
+// assets this engine ships rather than files core served from public/; and
+// the hero tagline selector at `.hero p.allcaps`, which followed core's
+// heading-order fix moving that element from an h4 to a p.
 @import "variables_mixins";
 
 $mossley-primary: #28a9e1;
@@ -177,7 +179,6 @@ a {
 	background-size: auto 100%;
 	height: 220px;
 
-	@include for-tablet-landscape-up;
 	@include for-tablet-portrait-up {
 		height: 290px;
 	}

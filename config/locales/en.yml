@@ -1,3 +1,6 @@
+# Every string the Mossley theme renders, namespaced under mossley.* so it
+# cannot collide with core's. Every key here is read by app/ or lib/, which
+# spec/i18n_spec.rb enforces.
 en:
   mossley:
     home:

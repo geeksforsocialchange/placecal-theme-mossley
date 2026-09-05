@@ -16,7 +16,7 @@ RSpec.describe 'host contract' do
   it 'sets the stylesheet, homepage and map style' do
     expect(theme.stylesheet).to eq('mossley/theme')
     expect(theme.homepage_view).to eq('Mossley::Views::Home')
-    expect(theme.map_style).to eq('mossley')
+    expect(theme.map_style).to eq('blue')
   end
 
   it 'leaves core in charge of everything else' do

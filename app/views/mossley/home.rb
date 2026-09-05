@@ -7,9 +7,16 @@
 class Mossley::Views::Home < Views::Base
   prop :site, Site, reader: :private
 
+  # The share image logical path, guarded below. image_url raises
+  # Propshaft::MissingAssetError on a missing asset, which would 500 the
+  # homepage; core's own theme.og_image degrades instead, and this keeps the
+  # same promise while staying homepage-only.
+  OG_IMAGE = 'mossley/og.png'
+
+  # Core's layout appends the site name to any :title set here, so a theme
+  # that wants the bare site name sets no :title at all.
   def view_template
-    content_for(:title) { site.name }
-    content_for(:image) { image_url('mossley/og.png') }
+    content_for(:image) { image_url(OG_IMAGE) } if PlaceCal::Theme.asset_resolves?(OG_IMAGE)
 
     render_hero
     render_mission
@@ -21,7 +28,7 @@ class Mossley::Views::Home < Views::Base
 
   def render_hero
     section do
-      div(class: 'hero_image hero_image--mossley')
+      div(class: 'hero_image--mossley')
     end
 
     section(class: 'region region__title--mossley') do

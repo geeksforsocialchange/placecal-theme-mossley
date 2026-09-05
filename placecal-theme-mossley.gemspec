@@ -9,8 +9,7 @@ Gem::Specification.new do |spec|
   spec.email       = ['support@placecal.org']
   spec.homepage    = 'https://github.com/geeksforsocialchange/placecal-theme-mossley'
   spec.summary     = 'The Marvellous Mossley theme for PlaceCal'
-  spec.description = 'A PlaceCal extension engine providing the Marvellous Mossley theme: the homepage view, copy, artwork, map style and prebuilt CSS. Contains no models, migrations or business logic.'
-  # Licence to be confirmed by the maintainer; see LICENSE.
+  spec.description = 'A PlaceCal extension engine providing the Marvellous Mossley theme: the homepage view, copy, artwork and prebuilt CSS. Contains no models, migrations or business logic.'
   spec.license = 'AGPL-3.0'
 
   spec.metadata['homepage_uri'] = spec.homepage
