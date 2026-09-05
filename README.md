@@ -25,30 +25,19 @@ There are deliberately no models, migrations, controllers or routes, and no comp
 
 ## Installation
 
-Add the engine to the PlaceCal installation's `Gemfile`, pinned to a tag, in the single removable extensions block described in core's `doc/extensions.md`:
-
-```ruby
-# Installation-specific extensions for placecal.org. Not part of core: a
-# self-hosted PlaceCal can delete this block.
-group :extensions do
-  gem 'placecal-theme-transdimension',
-      github: 'geeksforsocialchange/placecal-theme-transdimension',
-      tag: 'v0.3.10'
-  gem 'placecal-theme-mossley',
-      github: 'geeksforsocialchange/placecal-theme-mossley',
-      tag: 'v0.1.1'
-end
-```
+The engine goes in the PlaceCal installation's `Gemfile`, pinned to a tag, in the single removable extensions block. The block and the version to pin are core's, not this repo's: see [Installation and Gemfile](https://github.com/geeksforsocialchange/PlaceCal/blob/main/doc/extensions.md#installation-and-gemfile) in core's `doc/extensions.md`.
 
 The CSS is committed prebuilt, so core's Docker build needs no extra Node step.
 
 ### Minimum core
 
-The host has to be a PlaceCal with the extension theme registry. Specifically, `PlaceCal::Extensions.register_theme` must exist and the theme it yields must support every setting this engine uses:
+The host has to be a PlaceCal that ships `PlaceCal::Extension`, the shared engine infrastructure this engine includes. Core requires it from `config/application.rb` before Bundler requires the extension gems; on a core too old to have it, the two-line guard in `lib/mossley.rb` aborts naming this gem rather than raising a `NameError` from the middle of a class body.
+
+The theme that core yields also has to support every setting this engine declares in `required_settings`:
 
 `stylesheet`, `homepage_view`, `map_style`
 
-The engine checks this while it registers, and raises `Mossley::UnsupportedHost` naming the missing capability rather than failing with a `NoMethodError` from inside an initializer. `Mossley::Engine::REQUIRED_THEME_SETTINGS` is the list it checks.
+`PlaceCal::Extension` checks that while it registers, and raises `PlaceCal::Extension::UnsupportedHost` naming the missing setting rather than failing with a `NoMethodError` from inside an initializer.
 
 The check is `respond_to?` and nothing more, so it catches a setting that is absent, not one whose signature changed. That drift is covered by `spec/host_contract_spec.rb`, which runs `Mossley::Engine.configure_theme` against a real `PlaceCal::Theme` and reads every setting back.
 
@@ -56,27 +45,21 @@ The host also has to be a PlaceCal whose Mossley site is on theme `mossley` rath
 
 ## Development
 
-The specs boot the PlaceCal core application with this engine loaded, so they need a checkout of core and core's gem bundle. Check core out next to this repo (the default core path is `../PlaceCal`, override it with `PLACECAL_CORE_PATH`).
-
-Core's own `Gemfile` pins this engine to a git tag, which would run the specs against the released gem rather than your working tree. So point Bundler at a Gemfile that swaps that pin for a `path:` entry. Core's own `bin/extension-dev-gemfile` writes one, and it leaves every extension it is not asked to swap at the tag core pins, so one boot still loads both theme engines, which is what `spec/requests/two_engines_spec.rb` needs.
+The specs boot the PlaceCal core application with this engine loaded, so they need a checkout of core and core's gem bundle. Check core out next to this repo (the default core path is `../PlaceCal`, override it with `PLACECAL_CORE_PATH`), then follow [Running an extension's suite](https://github.com/geeksforsocialchange/PlaceCal/blob/main/doc/extensions.md#running-an-extensions-suite) in core's `doc/extensions.md`. For this engine that is:
 
 ```sh
 # from the core checkout
 bin/extension-dev-gemfile placecal-theme-mossley=../placecal-theme-mossley
-```
 
-Then run the specs against it:
-
-```sh
-cd /path/to/placecal-theme-mossley
+# from this checkout
 PLACECAL_CORE_PATH=/path/to/PlaceCal \
   BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev \
   RAILS_ENV=test bundle exec rspec
 ```
 
-`spec/rails_helper.rb` aborts with an explanatory message if the booted engine is not this working tree, so a stale Gemfile fails loudly instead of quietly testing the installed tag.
+The generator leaves every extension it is not asked to swap at the tag core pins, so one boot still loads both theme engines, which is what `spec/requests/two_engines_spec.rb` needs. `PlaceCal::ExtensionSpec.boot!` aborts with an explanatory message if the booted engine is not this working tree, so a stale Gemfile fails loudly instead of quietly testing the installed tag.
 
-This engine's own `Gemfile` exists for gem metadata and tooling; it cannot resolve the gems core needs to boot, which is why the invocations above point Bundler at core. RuboCop runs the same way:
+This engine's own `Gemfile` exists for gem metadata and tooling; it cannot resolve the gems core needs to boot, which is why the invocations above point Bundler at core. RuboCop runs the same way, and reads its rules from the core checkout beside it:
 
 ```sh
 BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev bundle exec rubocop
@@ -84,7 +67,7 @@ BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev bundle exec rubocop
 
 ### Releasing
 
-Installations pin this engine by tag, so a release is a version bump followed by a tag. Bump `lib/mossley/version.rb` and `package.json` together (a spec fails if they disagree, or if the latest tag is ahead of `VERSION`), merge, then tag the merge commit `v<version>`. CI fails a tag push whose tag name does not match `VERSION`.
+The release convention is the same for every extension and lives in core: see [Releasing an extension](https://github.com/geeksforsocialchange/PlaceCal/blob/main/doc/extensions.md#releasing-an-extension) in `doc/extensions.md`. For this engine the version lives in `lib/mossley/version.rb` and `package.json`, and `spec/version_spec.rb` fails if the two disagree or if the latest tag is ahead of `VERSION`.
 
 ### Sass
 
