@@ -37,8 +37,11 @@ RSpec.describe 'two theme engines in one process', type: :request do
     expect(response.body).to include('Marvellous Mossley celebrates our town')
     expect(response.body).not_to include('transdimension/theme')
 
+    # A marker the Trans Dimension homepage view owns. The site name is no use
+    # here: core's navigation prints it into the chrome of every page, so the
+    # example passed with that homepage view entirely broken.
     get 'http://transdimension.lvh.me/'
-    expect(response.body).to include('The Trans Dimension')
+    expect(response.body).to include('td-section--intro')
     expect(response.body).not_to include('mossley/theme')
   end
 

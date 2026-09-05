@@ -7,7 +7,7 @@ require 'rails_helper'
 RSpec.describe 'Mossley theme', type: :request do
   let(:site) do
     create(:site, slug: 'mossley', theme: 'mossley', name: 'Marvellous Mossley',
-                  url: 'https://mossley.lvh.me')
+                  tagline: 'Our town, all in one place', url: 'https://mossley.lvh.me')
   end
 
   before { site.neighbourhoods << create(:riverside_ward) }
@@ -70,6 +70,20 @@ RSpec.describe 'Mossley theme', type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).not_to match(%r{property="og:image" content="[^"]*/assets/mossley/og-})
+    end
+  end
+
+  # app/scss/mossley.scss hides the hero tagline with `.hero p.allcaps`, which
+  # names the element core's Components::Hero emits. Core moved that from an h4
+  # to a p once already (this repo needed b51e760 to catch up), and neither
+  # suite noticed. Assert the element so a second move fails loudly here rather
+  # than showing a duplicated tagline on every interior page.
+  describe 'interior pages' do
+    it 'renders the tagline in the element the theme stylesheet hides' do
+      get 'http://mossley.lvh.me/events'
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include('<p class="allcaps">Our town, all in one place</p>')
     end
   end
 
