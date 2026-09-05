@@ -1,0 +1,16 @@
+{
+	"name": "placecal-theme-mossley",
+	"version": "0.1.0",
+	"private": true,
+	"description": "Sass build for the PlaceCal Marvellous Mossley theme engine",
+	"devDependencies": {
+		"sass": "1.103.1"
+	},
+	"scripts": {
+		"build": "./node_modules/.bin/sass app/scss/mossley.scss app/assets/builds/mossley/theme.css --style=compressed --no-source-map --silence-deprecation=import --load-path=app/scss",
+		"css-check": "./node_modules/.bin/sass app/scss/mossley.scss tmp/theme-check.css --style=compressed --no-source-map --silence-deprecation=import --load-path=app/scss && cmp app/assets/builds/mossley/theme.css tmp/theme-check.css"
+	},
+	"engines": {
+		"node": "24.20.0"
+	}
+}

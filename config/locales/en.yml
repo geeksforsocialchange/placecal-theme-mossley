@@ -1,0 +1,18 @@
+en:
+  mossley:
+    home:
+      hero:
+        heading: Marvellous Mossley celebrates our town and lets people know about all the community activity happening here.
+      mission:
+        groups: There are around 40 groups, mostly volunteer led, offering an amazing amount of activities at a variety of locations in our little town. Marvellous Mossley is a platform to bring all of this together in one place through this website and also the printed Mossley Missive.
+        projects: We coordinate an annual celebration event and the great Mossley Mammoth Hunt along with other initiatives such as the Marvellous Mossley Pebble Dash. The project relies on ongoing grant funding to continue.
+        working_with: We're working with
+        partners_link: local organisations
+        and: and
+        places_link: places
+        calendar_for: to create a great calendar of everything that's on in %{site}.
+        events_cta: See what's on
+      about:
+        heading: About Us
+        join: If you're a local organisation and want to join our network, get in touch below.
+        support: We provide training and support to help you publish your events and promote your activities.

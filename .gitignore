@@ -1,0 +1,5 @@
+node_modules/
+tmp/
+.bundle/
+spec/examples.txt
+Gemfile.lock

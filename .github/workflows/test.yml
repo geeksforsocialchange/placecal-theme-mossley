@@ -1,0 +1,149 @@
+name: Test
+
+on:
+  push:
+    branches: ["main"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      placecal_ref:
+        description: "Ref of geeksforsocialchange/PlaceCal to build against"
+        required: false
+        default: "feature/td-extension"
+
+env:
+  # The core branch this engine is built against. Switch to "main" once the
+  # core extension work is merged.
+  PLACECAL_REF: ${{ github.event.inputs.placecal_ref || 'feature/td-extension' }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: placecal_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/placecal_test
+      PLACECAL_CORE_PATH: ${{ github.workspace }}/PlaceCal
+      BUNDLE_GEMFILE: ${{ github.workspace }}/PlaceCal/Gemfile.mossley-dev
+
+    steps:
+      - name: Checkout the theme engine
+        uses: actions/checkout@v4
+        with:
+          path: theme
+
+      # First real step: it depends on nothing but this checkout, and a mistagged
+      # release should fail in seconds rather than after a core checkout, a
+      # bundle install and a core asset build. A PlaceCal installation pins this
+      # engine by tag, so a tag that disagrees with VERSION would ship a build
+      # claiming a version it is not. No-op on branch pushes and pull requests.
+      - name: Fail if a pushed tag disagrees with VERSION
+        working-directory: theme
+        run: |
+          if [ "$GITHUB_REF_TYPE" != "tag" ]; then
+            echo "Not a tag push, nothing to check."
+            exit 0
+          fi
+          version=$(ruby -e 'require "./lib/mossley/version"; print Mossley::VERSION')
+          if [ "$GITHUB_REF_NAME" != "v$version" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match VERSION $version (expected v$version)."
+            exit 1
+          fi
+          echo "Tag $GITHUB_REF_NAME matches VERSION $version."
+
+      - name: Checkout PlaceCal core
+        uses: actions/checkout@v4
+        with:
+          repository: geeksforsocialchange/PlaceCal
+          ref: ${{ env.PLACECAL_REF }}
+          path: PlaceCal
+
+      # Core's Gemfile pins this engine to a released tag. CI has to test the
+      # checkout under review instead, so swap the pin for a path entry, with
+      # the same generator the README tells a developer to run locally.
+      # spec/rails_helper.rb aborts if this is ever wrong. The generated
+      # Gemfile puts both theme engines on paths; only this one exists here, so
+      # the Trans Dimension entry is dropped and the two-engine spec skips.
+      - name: Point core's bundle at this checkout
+        run: |
+          theme/bin/mossley-dev-gemfile PlaceCal ../theme
+          sed -i "/placecal-theme-transdimension/d" PlaceCal/Gemfile.mossley-dev
+
+      # Core's image processing needs libvips at boot, the same as core's own CI
+      - name: Install libvips
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips-dev
+
+      - name: Read core's Ruby version
+        id: ruby
+        run: echo "version=$(cat PlaceCal/.ruby-version)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Ruby (version from core's .ruby-version)
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ steps.ruby.outputs.version }}
+          bundler-cache: true
+          working-directory: PlaceCal
+
+      # The request specs render core's layout, which links core's built CSS,
+      # so core's assets have to be built the way core's own CI builds them.
+      - name: Set up Node for core
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: PlaceCal/.node-version
+          cache: yarn
+          cache-dependency-path: PlaceCal/yarn.lock
+
+      - name: Install core JS dependencies
+        working-directory: PlaceCal
+        run: yarn install --frozen-lockfile
+
+      - name: Build core assets
+        working-directory: PlaceCal
+        run: |
+          bin/yarn run build:all
+          bin/rails dartsass:build
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: theme/package.json
+          cache: yarn
+          cache-dependency-path: theme/yarn.lock
+
+      - name: Install JS dependencies
+        working-directory: theme
+        run: yarn install --frozen-lockfile
+
+      - name: Fail if the committed Sass build is stale
+        working-directory: theme
+        run: yarn run css-check
+
+      - name: RuboCop
+        working-directory: theme
+        run: bundle exec rubocop
+
+      - name: Prepare core's test database
+        working-directory: PlaceCal
+        run: bin/rails db:schema:load
+
+      - name: RSpec
+        working-directory: theme
+        run: bundle exec rspec

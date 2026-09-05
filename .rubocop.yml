@@ -1,0 +1,189 @@
+# frozen_string_literal: true
+#
+# RuboCop configuration for the PlaceCal Marvellous Mossley theme engine.
+#
+# Copied from core's .rubocop.yml (geeksforsocialchange/PlaceCal) and trimmed to
+# what an extension can contain: Phlex views and components, locale files and
+# specs. Core's file is inherited by copy rather than by path so CI does not
+# depend on a sibling checkout being present at a fixed location. When core's
+# rules change, re-copy the relevant sections.
+
+plugins:
+  - rubocop-rake
+  - rubocop-rspec
+  - rubocop-performance
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRailsVersion: 8.0
+  Exclude:
+    - "node_modules/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - ".git/**/*"
+
+# =============================================================================
+# Layout cops
+# =============================================================================
+
+Layout/EmptyLinesAroundExceptionHandlingKeywords:
+  Enabled: false
+
+Layout/ExtraSpacing:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 515
+
+# =============================================================================
+# Lint cops
+# =============================================================================
+
+# Phlex components don't need super in initialize
+Lint/MissingSuper:
+  Exclude:
+    - "app/components/**/*.rb"
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - "spec/**/*.rb"
+
+Lint/RedundantCopDisableDirective:
+  Enabled: false
+
+# =============================================================================
+# Metrics cops
+# =============================================================================
+
+# Phlex views/components are template code where each HTML element call
+# inflates AbcSize/MethodLength. These metrics don't add value for templates.
+Metrics/AbcSize:
+  Exclude:
+    - "app/views/**/*.rb"
+    - "app/components/**/*.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "app/views/**/*.rb"
+    - "app/components/**/*.rb"
+
+Metrics/ParameterLists:
+  Exclude:
+    - "app/views/**/*.rb"
+    - "app/components/**/*.rb"
+
+# An RSpec describe block is one long block by construction. Core raises the
+# limit for the whole app in its .rubocop_todo.yml (Max: 322); the engine only
+# needs it for specs.
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*.rb"
+
+Metrics/ClassLength:
+  Exclude:
+    - "spec/**/*.rb"
+    - "app/views/**/*.rb"
+    - "app/components/**/*.rb"
+
+# =============================================================================
+# Naming cops
+# =============================================================================
+
+# Literal Properties' after_initialize is not memoization
+Naming/MemoizedInstanceVariableName:
+  Exclude:
+    - "app/components/**/*.rb"
+
+Naming/BlockForwarding:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+# =============================================================================
+# Rails cops
+# =============================================================================
+
+# Phlex uses `raw` for rendering form helpers and HTML content
+Rails/OutputSafety:
+  Exclude:
+    - "app/components/**/*.rb"
+    - "app/views/**/*.rb"
+
+Rails/RootPathnameMethods:
+  Enabled: false
+
+# =============================================================================
+# RSpec cops
+# =============================================================================
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 4
+
+RSpec/DescribeClass:
+  Enabled: false
+
+RSpec/DescribeMethod:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 15
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/IndexedLet:
+  Enabled: false
+
+RSpec/LeakyConstantDeclaration:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/SpecFilePathFormat:
+  Enabled: false
+
+RSpec/NoExpectationExample:
+  Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+# =============================================================================
+# Style cops
+# =============================================================================
+
+# Phlex views and components use compact style (class Foo::Bar::Baz), matching
+# core and the Zeitwerk namespaces the engine pushes.
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/HashSyntax:
+  Enabled: false
+
+Style/OneClassPerFile:
+  Exclude:
+    - "lib/transdimension.rb"
+
+Style/RedundantConstantBase:
+  Enabled: false
+
+# The gem entry point must match the gem name for Bundler.require.
+Naming/FileName:
+  Exclude:
+    - lib/placecal-theme-mossley.rb
