@@ -3,14 +3,11 @@
 require 'rails_helper'
 
 # The point of WP 5.1: two extension engines in one process, each registering
-# its own theme, each site getting its own. Both gems are on the load path in
-# Gemfile.mossley-dev; this spec is skipped when only one of them is loaded, so
-# the engine's own CI (which loads only this gem) still passes.
+# its own theme, each site getting its own. Core's bin/extension-dev-gemfile
+# swaps only the gems it is asked to swap and leaves every other extension at
+# the tag core pins, so the Trans Dimension engine is loaded in CI as well as
+# locally and these examples run everywhere.
 RSpec.describe 'two theme engines in one process', type: :request do
-  before do
-    skip 'placecal-theme-transdimension is not loaded in this bundle' unless defined?(::Transdimension::Engine)
-  end
-
   let!(:mossley_site) do
     create(:site, slug: 'mossley', theme: 'mossley', name: 'Marvellous Mossley',
                   url: 'https://mossley.lvh.me').tap { |s| s.neighbourhoods << create(:riverside_ward) }

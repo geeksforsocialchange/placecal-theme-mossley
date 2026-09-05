@@ -9,7 +9,7 @@ task :default do
     Run the specs against core's bundle instead:
 
       PLACECAL_CORE_PATH=/path/to/PlaceCal \\
-        BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.mossley-dev \\
+        BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev \\
         RAILS_ENV=test bundle exec rspec
 
     See "Development" in README.md.
