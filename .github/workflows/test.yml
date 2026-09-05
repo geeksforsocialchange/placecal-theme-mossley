@@ -77,13 +77,11 @@ jobs:
       # Core's Gemfile pins this engine to a released tag. CI has to test the
       # checkout under review instead, so swap the pin for a path entry, with
       # the same generator the README tells a developer to run locally.
-      # spec/rails_helper.rb aborts if this is ever wrong. The generated
-      # Gemfile puts both theme engines on paths; only this one exists here, so
-      # the Trans Dimension entry is dropped and the two-engine spec skips.
+      # spec/rails_helper.rb aborts if this is ever wrong. With no Trans
+      # Dimension checkout here, the generator keeps core's pinned tag for it,
+      # so the two-engine spec runs against a real second engine.
       - name: Point core's bundle at this checkout
-        run: |
-          theme/bin/mossley-dev-gemfile PlaceCal ../theme
-          sed -i "/placecal-theme-transdimension/d" PlaceCal/Gemfile.mossley-dev
+        run: theme/bin/mossley-dev-gemfile PlaceCal ../theme
 
       # Core's image processing needs libvips at boot, the same as core's own CI
       - name: Install libvips
