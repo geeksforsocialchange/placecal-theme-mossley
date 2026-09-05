@@ -28,7 +28,7 @@ class Mossley::Views::Home < Views::Base
 
   def render_hero
     section do
-      div(class: 'hero_image hero_image--mossley')
+      div(class: 'hero_image--mossley')
     end
 
     section(class: 'region region__title--mossley') do

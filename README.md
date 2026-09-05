@@ -64,6 +64,8 @@ This engine's own `Gemfile` exists for gem metadata and tooling; it cannot resol
 BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev bundle exec rubocop
 ```
 
+`PLACECAL_CORE_PATH` does not reach RuboCop. `.rubocop.yml` inherits from `../PlaceCal/config/rubocop/extension.yml`, a plain relative path, so linting needs the core checkout to sit literally at `../PlaceCal` whatever the env var says. Without it RuboCop aborts with "Configuration file not found" and reports no offences.
+
 ### Releasing
 
 The release convention is the same for every extension and lives in core: see [Releasing an extension](https://github.com/geeksforsocialchange/PlaceCal/blob/main/doc/extensions.md#releasing-an-extension) in `doc/extensions.md`. For this engine the version lives in `lib/mossley/version.rb` and `package.json`, and `spec/version_spec.rb` fails if the two disagree or if the latest tag is ahead of `VERSION`.
@@ -80,7 +82,7 @@ yarn css-check  # fail if the committed CSS is stale
 
 `app/scss/variables_mixins.scss` and the `variables/` and `modules/` partials under it are copies of core's, taken at the point of extraction. They are the compile inputs the theme has always had. A new theme should not copy them: it should be Tailwind plus CSS custom properties, as `doc/extensions.md` describes.
 
-The one thing the move changed in the CSS is where the background images come from. In core the stylesheet pointed at `/images/regions/mossley/...`, files core served out of `public/`. They now ship with this engine under `app/assets/images/mossley/`, and the stylesheet refers to them by name, so Propshaft rewrites each `url()` to the fingerprinted asset path. The rest of the compiled file is byte-for-byte what core built.
+The move changed two things in the CSS. The background images: in core the stylesheet pointed at `/images/regions/mossley/...`, files core served out of `public/`. They now ship with this engine under `app/assets/images/mossley/`, and the stylesheet refers to them by name, so Propshaft rewrites each `url()` to the fingerprinted asset path. And the hero tagline selector, `.hero p.allcaps`, which followed core's heading-order fix moving that element from an h4 to a p; `spec/requests/theme_spec.rb` asserts the element so a second move fails here. The rest of the compiled file is byte-for-byte what core built.
 
 ### Map style
 
