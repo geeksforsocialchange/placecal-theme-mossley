@@ -58,6 +58,19 @@ RSpec.describe 'Mossley theme', type: :request do
 
       expect(response.body).to match(%r{property="og:image" content="[^"]*/assets/mossley/og-[0-9a-f]+\.png"})
     end
+
+    # image_url raises Propshaft::MissingAssetError when the file is renamed or
+    # dropped, so the homepage would 500 rather than fall back to core's
+    # generated share card the way theme.og_image does (#3368).
+    it 'falls back to core\'s share card when the engine image is missing' do
+      allow(PlaceCal::Theme).to receive(:asset_resolves?).and_call_original
+      allow(PlaceCal::Theme).to receive(:asset_resolves?).with('mossley/og.png').and_return(false)
+
+      get 'http://mossley.lvh.me/'
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to match(%r{property="og:image" content="[^"]*/assets/mossley/og-})
+    end
   end
 
   describe 'the stylesheet' do
