@@ -19,7 +19,6 @@ app/assets/builds/mossley/         Built CSS, committed, served by Propshaft
 app/assets/builds/map-styles/      MapLibre style JSON, served by Propshaft
 app/assets/images/mossley/         Backgrounds, hero artwork and the share card
 config/locales/en.yml              Theme strings, namespaced under mossley.*
-bin/mossley-dev-gemfile            Writes core's Gemfile.mossley-dev for dev and CI
 ```
 
 There are deliberately no models, migrations, controllers or routes, and no components: the homepage is built from core's own components. Every visible string goes through `t()`.
@@ -59,10 +58,11 @@ The host also has to be a PlaceCal whose Mossley site is on theme `mossley` rath
 
 The specs boot the PlaceCal core application with this engine loaded, so they need a checkout of core and core's gem bundle. Check core out next to this repo (the default core path is `../PlaceCal`, override it with `PLACECAL_CORE_PATH`).
 
-Core's own `Gemfile` pins this engine to a git tag, which would run the specs against the released gem rather than your working tree. So point Bundler at a Gemfile that swaps that pin for a `path:` entry. `bin/mossley-dev-gemfile` writes it into the core checkout (do not commit it there; add it to core's `.git/info/exclude`). It puts **both** PlaceCal theme engines on paths, so one boot loads two extensions, which is what `spec/requests/two_engines_spec.rb` needs. CI runs the same script and drops the Trans Dimension line, so that spec skips there.
+Core's own `Gemfile` pins this engine to a git tag, which would run the specs against the released gem rather than your working tree. So point Bundler at a Gemfile that swaps that pin for a `path:` entry. Core's own `bin/extension-dev-gemfile` writes one, and it leaves every extension it is not asked to swap at the tag core pins, so one boot still loads both theme engines, which is what `spec/requests/two_engines_spec.rb` needs.
 
 ```sh
-bin/mossley-dev-gemfile /path/to/PlaceCal
+# from the core checkout
+bin/extension-dev-gemfile placecal-theme-mossley=../placecal-theme-mossley
 ```
 
 Then run the specs against it:
@@ -70,7 +70,7 @@ Then run the specs against it:
 ```sh
 cd /path/to/placecal-theme-mossley
 PLACECAL_CORE_PATH=/path/to/PlaceCal \
-  BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.mossley-dev \
+  BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev \
   RAILS_ENV=test bundle exec rspec
 ```
 
@@ -79,7 +79,7 @@ PLACECAL_CORE_PATH=/path/to/PlaceCal \
 This engine's own `Gemfile` exists for gem metadata and tooling; it cannot resolve the gems core needs to boot, which is why the invocations above point Bundler at core. RuboCop runs the same way:
 
 ```sh
-BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.mossley-dev bundle exec rubocop
+BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev bundle exec rubocop
 ```
 
 ### Releasing
