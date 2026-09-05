@@ -1,6 +1,6 @@
 {
 	"name": "placecal-theme-mossley",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"private": true,
 	"description": "Sass build for the PlaceCal Marvellous Mossley theme engine",
 	"devDependencies": {

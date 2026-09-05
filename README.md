@@ -37,7 +37,7 @@ group :extensions do
       tag: 'v0.3.10'
   gem 'placecal-theme-mossley',
       github: 'geeksforsocialchange/placecal-theme-mossley',
-      tag: 'v0.1.0'
+      tag: 'v0.1.1'
 end
 ```
 
