@@ -45,6 +45,14 @@ RSpec.describe 'Mossley theme', type: :request do
       expect(response.body).to include('region__support')
     end
 
+    # Core's layout appends the site name to any content_for(:title), so a
+    # theme setting the title to the site name prints it twice (#3368).
+    it 'titles the page with the site name once' do
+      get 'http://mossley.lvh.me/'
+
+      expect(response.body).to include('<title>Marvellous Mossley</title>')
+    end
+
     it 'uses the engine share image' do
       get 'http://mossley.lvh.me/'
 

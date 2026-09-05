@@ -7,8 +7,9 @@
 class Mossley::Views::Home < Views::Base
   prop :site, Site, reader: :private
 
+  # Core's layout appends the site name to any :title set here, so a theme
+  # that wants the bare site name sets no :title at all.
   def view_template
-    content_for(:title) { site.name }
     content_for(:image) { image_url('mossley/og.png') }
 
     render_hero
