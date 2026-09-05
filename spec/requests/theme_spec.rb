@@ -76,7 +76,7 @@ RSpec.describe 'Mossley theme', type: :request do
 
   describe 'the map style' do
     it 'resolves the name from the theme' do
-      expect(PlaceCal::Extensions.fetch_theme('mossley').map_style_for(site)).to eq('mossley')
+      expect(PlaceCal::Extensions.fetch_theme('mossley').map_style_name).to eq('mossley')
     end
 
     it 'ships the style JSON as an engine asset' do
