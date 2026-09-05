@@ -28,7 +28,7 @@ RSpec.describe 'two theme engines in one process', type: :request do
 
     expect(mossley.stylesheet).to eq('mossley/theme')
     expect(transdimension.stylesheet).to eq('transdimension/theme')
-    expect(mossley.map_style).to eq('mossley')
+    expect(mossley.map_style).to eq('blue')
     expect(transdimension.map_style).to eq('transdimension')
   end
 
@@ -50,10 +50,10 @@ RSpec.describe 'two theme engines in one process', type: :request do
     expect(response.body).to match(%r{href="/assets/transdimension/theme-[0-9a-f]+\.css"})
   end
 
-  it 'serves both engines\' map styles' do
-    resolver = Rails.application.assets.resolver
-
-    expect(resolver.resolve('map-styles/mossley.json')).to be_present
-    expect(resolver.resolve('map-styles/transdimension.json')).to be_present
+  # Mossley names one of core's shipped styles; Trans Dimension ships its own
+  # as an engine asset. Both routes have to work in the one process.
+  it 'resolves each site\'s map style' do
+    expect(Rails.public_path.join('map-styles', 'blue.json')).to exist
+    expect(Rails.application.assets.resolver.resolve('map-styles/transdimension.json')).to be_present
   end
 end

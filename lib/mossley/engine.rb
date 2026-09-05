@@ -23,9 +23,12 @@ module Mossley
     theme :mossley do |theme|
       theme.stylesheet 'mossley/theme'
       theme.homepage_view 'Mossley::Views::Home'
-      # Blue OpenFreeMap style shipped with the engine, at
-      # app/assets/builds/map-styles/mossley.json.
-      theme.map_style 'mossley'
+      # Core's own blue OpenFreeMap style. The engine used to ship a copy of it
+      # under app/assets/builds/map-styles/, byte for byte identical, which
+      # would have gone stale the first time core updated the four styles in
+      # public/map-styles/. MapHelper#map_style_url checks that directory
+      # first, so naming the style is all this needs.
+      theme.map_style 'blue'
     end
   end
 end

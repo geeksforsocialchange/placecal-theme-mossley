@@ -95,13 +95,15 @@ RSpec.describe 'Mossley theme', type: :request do
     end
   end
 
+  # The theme names one of core's four shipped styles rather than shipping a
+  # copy of it, so there is no engine asset here to go stale against core's.
   describe 'the map style' do
     it 'resolves the name from the theme' do
-      expect(PlaceCal::Extensions.fetch_theme('mossley').map_style_name).to eq('mossley')
+      expect(PlaceCal::Extensions.fetch_theme('mossley').map_style_name).to eq('blue')
     end
 
-    it 'ships the style JSON as an engine asset' do
-      expect(Rails.application.assets.resolver.resolve('map-styles/mossley.json')).to be_present
+    it 'ships no style JSON of its own' do
+      expect(Rails.application.assets.resolver.resolve('map-styles/mossley.json')).to be_nil
     end
 
     it 'is the URL MapHelper hands the map' do
@@ -110,7 +112,7 @@ RSpec.describe 'Mossley theme', type: :request do
 
       url = ApplicationController.new.view_context.send(:map_style_url)
 
-      expect(url).to match(%r{/assets/map-styles/mossley-[0-9a-f]+\.json})
+      expect(url).to eq('/map-styles/blue.json')
     ensure
       Current.reset
     end

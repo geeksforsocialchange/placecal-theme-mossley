@@ -1,6 +1,6 @@
 # placecal-theme-mossley
 
-The Marvellous Mossley theme for [PlaceCal](https://github.com/geeksforsocialchange/PlaceCal), packaged as a PlaceCal extension (a Rails engine). It provides the theme stylesheet, the homepage, the copy, the artwork and the map style for the Mossley site, which is served by PlaceCal.
+The Marvellous Mossley theme for [PlaceCal](https://github.com/geeksforsocialchange/PlaceCal), packaged as a PlaceCal extension (a Rails engine). It provides the theme stylesheet, the homepage, the copy and the artwork for the Mossley site, which is served by PlaceCal.
 
 Extensions contain no models, no migrations and no business logic. See PlaceCal's `doc/extensions.md` for the extension contract.
 
@@ -16,7 +16,6 @@ app/scss/mossley.scss              Sass source
 app/scss/variables_mixins.scss     Core's Sass variables and mixins, copied
 app/scss/variables/, modules/      The partials variables_mixins imports
 app/assets/builds/mossley/         Built CSS, committed, served by Propshaft
-app/assets/builds/map-styles/      MapLibre style JSON, served by Propshaft
 app/assets/images/mossley/         Backgrounds, hero artwork and the share card
 config/locales/en.yml              Theme strings, namespaced under mossley.*
 ```
@@ -85,4 +84,6 @@ The one thing the move changed in the CSS is where the background images come fr
 
 ### Map style
 
-`app/assets/builds/map-styles/mossley.json` is the MapLibre style core used to serve from `public/map-styles/`. Propshaft picks it up at the same logical path, and `MapHelper#map_style_url` finds it there once core's copy is gone.
+The theme sets `map_style 'blue'`, which is one of the four MapLibre styles core ships in `public/map-styles/`. `MapHelper#map_style_url` looks there before the asset pipeline, so this engine ships no style JSON of its own.
+
+It used to. The `mossley.json` core served from `public/map-styles/` came over with the rest of the theme and turned out to be a byte-for-byte copy of core's `blue.json`, which would have gone stale the first time OpenFreeMap moved its sprite path or its tile host and core updated all four styles. Naming the style avoids that. An extension that genuinely needs its own styling still ships one, as `placecal-theme-transdimension` does.
