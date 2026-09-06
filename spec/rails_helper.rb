@@ -7,4 +7,4 @@ require 'spec_helper'
 
 PLACECAL_CORE = Pathname(ENV.fetch('PLACECAL_CORE_PATH', File.expand_path('../../PlaceCal', __dir__))).expand_path
 require PLACECAL_CORE.join('spec/extension_helper').to_s
-PlaceCal::ExtensionSpec.boot!(engine: 'mossley')
+PlaceCal::ExtensionSpec.boot!(engine: 'mossley', system_specs: true)

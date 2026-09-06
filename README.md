@@ -64,6 +64,8 @@ This engine's own `Gemfile` exists for gem metadata and tooling; it cannot resol
 BUNDLE_GEMFILE=/path/to/PlaceCal/Gemfile.extensions-dev bundle exec rubocop
 ```
 
+`spec/system/accessibility_spec.rb` runs axe-core over every page of a Mossley site, so it needs headless Chrome. It comes from core's bundle (`axe-core-rspec`, `selenium-webdriver`) and core's `spec/support`, which `boot!(system_specs: true)` already loads; CI installs Chrome because the workflow passes `chrome: true`. Locally it runs with the rest of the suite as long as Chrome is installed. One rule is skipped, `color-contrast`, because the Marvellous Mossley palette itself trips it (white on the brand blue measures 2.67:1); the spec says so.
+
 `PLACECAL_CORE_PATH` does not reach RuboCop. `.rubocop.yml` inherits from `../PlaceCal/config/rubocop/extension.yml`, a plain relative path, so linting needs the core checkout to sit literally at `../PlaceCal` whatever the env var says. Without it RuboCop aborts with "Configuration file not found" and reports no offences.
 
 ### Releasing
@@ -89,3 +91,7 @@ The move changed two things in the CSS. The background images: in core the style
 The theme sets `map_style 'blue'`, which is one of the four MapLibre styles core ships in `public/map-styles/`. `MapHelper#map_style_url` looks there before the asset pipeline, so this engine ships no style JSON of its own.
 
 It used to. The `mossley.json` core served from `public/map-styles/` came over with the rest of the theme and turned out to be a byte-for-byte copy of core's `blue.json`, which would have gone stale the first time OpenFreeMap moved its sprite path or its tile host and core updated all four styles. Naming the style avoids that. An extension that genuinely needs its own styling still ships one, as `placecal-theme-transdimension` does.
+
+## Copyright and licence
+
+The code is AGPL-3.0-only, matching PlaceCal. The artwork under `app/assets/images/mossley/` is the Marvellous Mossley brand and is not covered by the AGPL; `NOTICE` says what is known about where it came from, which is not yet who drew it. Add the illustrator's credit there if you know it.

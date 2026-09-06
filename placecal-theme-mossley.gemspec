@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.email       = ['support@placecal.org']
   spec.homepage    = 'https://github.com/geeksforsocialchange/placecal-theme-mossley'
   spec.summary     = 'The Marvellous Mossley theme for PlaceCal'
-  spec.description = 'A PlaceCal extension engine providing the Marvellous Mossley theme: the homepage view, copy, artwork and prebuilt CSS. Contains no models, migrations or business logic.'
-  spec.license = 'AGPL-3.0'
+  spec.description = 'A PlaceCal extension engine providing the Marvellous Mossley theme: the homepage view, copy, artwork and prebuilt CSS. Contains no models, migrations or business logic. The AGPL covers the code only: the Marvellous Mossley artwork packaged with it is not licensed under the AGPL and may not be reused outside a PlaceCal-served Mossley site. See the NOTICE file.'
+  spec.license = 'AGPL-3.0-only'
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = spec.homepage
@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
 
   # `**/*` matches directories too, and `gem build` warns on every one of them.
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir['{app,config,lib}/**/*', 'LICENSE', 'README.md'].select { |f| File.file?(f) }
+    Dir['{app,config,lib}/**/*', 'LICENSE', 'NOTICE', 'README.md'].select { |f| File.file?(f) }
   end
 
   # Core is the host application, never a dependency of the theme.

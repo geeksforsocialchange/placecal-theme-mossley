@@ -19,5 +19,5 @@ jobs:
     with:
       engine: placecal-theme-mossley
       module_dir: mossley
-      chrome: false
+      chrome: true
       placecal_ref: feature/td-extension

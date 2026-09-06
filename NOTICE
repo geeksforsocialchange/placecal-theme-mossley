@@ -1,0 +1,20 @@
+placecal-theme-mossley
+Copyright (C) 2026 Geeks for Social Change
+
+The code in this repository is licensed under the GNU Affero General Public
+License v3.0, the text of which is in the LICENSE file.
+
+The AGPL covers the code only. The artwork packaged alongside it is the
+Marvellous Mossley brand and is not licensed under the AGPL:
+
+  * the illustrated panorama of Mossley, app/assets/images/mossley/hero-desktop.jpg
+  * the share image carrying the Marvellous Mossley wordmark,
+    app/assets/images/mossley/og.png
+  * the background and hero decoration PNGs in app/assets/images/mossley/
+
+These files came into PlaceCal with the Mossley site in September 2018 and
+June 2019 and moved here unchanged. The illustrator is not recorded anywhere
+we can find: not in PlaceCal's history, not in the files' metadata, not on the
+live site. If you know who drew the panorama, add the credit here. The artwork
+is included so that the Marvellous Mossley site can be served by PlaceCal,
+and may not be reused outside that context without its owners' permission.
