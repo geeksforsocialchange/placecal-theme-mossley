@@ -11,13 +11,12 @@ on:
 # assets, then run this engine's linting and specs. See doc/extensions.md there.
 #
 # A reusable workflow is resolved at the ref the caller names, so the `uses` ref
-# and placecal_ref name the same branch. Switch both to main once PlaceCal
-# #3436 merges.
+# and placecal_ref name the same branch.
 jobs:
   test:
-    uses: geeksforsocialchange/PlaceCal/.github/workflows/extension-test.yml@feature/td-extension
+    uses: geeksforsocialchange/PlaceCal/.github/workflows/extension-test.yml@main
     with:
       engine: placecal-theme-mossley
       module_dir: mossley
       chrome: true
-      placecal_ref: feature/td-extension
+      placecal_ref: main
