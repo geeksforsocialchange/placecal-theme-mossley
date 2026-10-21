@@ -7,7 +7,7 @@ require 'rails_helper'
 RSpec.describe 'Mossley theme', type: :request do
   let(:site) do
     create(:site, slug: 'mossley', theme: 'mossley', name: 'Marvellous Mossley',
-                  tagline: 'Our town, all in one place', url: 'https://mossley.lvh.me')
+                  tagline: 'Our town, all in one place')
   end
 
   before { site.neighbourhoods << create(:riverside_ward) }
