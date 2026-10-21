@@ -20,3 +20,27 @@ jobs:
       module_dir: mossley
       chrome: true
       placecal_ref: main
+
+  # Merging a VERSION bump to green main tags it and publishes the release; core opens the pin PR.
+  release:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Release VERSION if it has no tag yet
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version=$(sed -nE "s/.*VERSION = '([0-9]+\.[0-9]+\.[0-9]+)'.*/\1/p" lib/mossley/version.rb)
+          [ -n "$version" ] || { echo "No VERSION in lib/mossley/version.rb"; exit 1; }
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "v$version is already released."
+            exit 0
+          fi
+          gh release create "v$version" --target "$GITHUB_SHA" --title "v$version" --generate-notes
