@@ -9,13 +9,11 @@ require 'rails_helper'
 # locally and these examples run everywhere.
 RSpec.describe 'two theme engines in one process', type: :request do
   let!(:mossley_site) do
-    create(:site, slug: 'mossley', theme: 'mossley', name: 'Marvellous Mossley',
-                  url: 'https://mossley.lvh.me').tap { |s| s.neighbourhoods << create(:riverside_ward) }
+    create(:site, slug: 'mossley', theme: 'mossley', name: 'Marvellous Mossley').tap { |s| s.neighbourhoods << create(:riverside_ward) }
   end
 
   let!(:transdimension_site) do
-    create(:site, slug: 'transdimension', theme: 'transdimension', name: 'The Trans Dimension',
-                  url: 'https://transdimension.lvh.me').tap { |s| s.neighbourhoods << create(:riverside_ward) }
+    create(:site, slug: 'transdimension', theme: 'transdimension', name: 'The Trans Dimension').tap { |s| s.neighbourhoods << create(:riverside_ward) }
   end
 
   it 'registers both themes alongside core\'s own' do

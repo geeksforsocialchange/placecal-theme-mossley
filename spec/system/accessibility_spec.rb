@@ -19,7 +19,7 @@ RSpec.describe 'Mossley accessibility', type: :system do
   end
 
   let(:ward) { create(:riverside_ward) }
-  let(:site) { create(:site, slug: 'mossley', theme: 'mossley', url: 'https://mossley.lvh.me') }
+  let(:site) { create(:site, slug: 'mossley', theme: 'mossley') }
   let(:partner) { create(:partner, name: 'Mossley Community Centre', address: create(:riverside_address, neighbourhood: ward)) }
 
   let(:event) do
