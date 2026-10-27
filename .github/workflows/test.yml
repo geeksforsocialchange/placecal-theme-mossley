@@ -5,6 +5,10 @@ on:
     branches: ["main"]
     tags: ["v*"]
   pull_request:
+  # Nightly against core main, so a core change that breaks this theme shows up the next morning.
+  schedule:
+    - cron: "41 3 * * *"
+  workflow_dispatch:
 
 # The job itself is core's, because an extension's CI is core's CI plus the
 # extension: check out both, point core's bundle at this checkout, build core's
