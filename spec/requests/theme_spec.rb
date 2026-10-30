@@ -83,7 +83,7 @@ RSpec.describe 'Mossley theme', type: :request do
       get 'http://mossley.lvh.me/events'
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('<p class="allcaps">Our town, all in one place</p>')
+      expect(response.parsed_body.at_css('.hero p.allcaps')&.text).to eq('Our town, all in one place')
     end
   end
 
