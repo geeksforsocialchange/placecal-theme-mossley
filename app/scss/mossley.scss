@@ -2,8 +2,8 @@
 // (was app/assets/stylesheets/themes/custom/mossley.scss). Three changes from
 // what core built: the import path; the background image URLs, which now name
 // assets this engine ships rather than files core served from public/; and
-// the hero tagline selector at `.hero p.allcaps`, which followed core's
-// heading-order fix moving that element from an h4 to a p.
+// the hero and event selectors, which use core's styling hooks (data-scope
+// and data-part, core doc/extensions.md "Styling hooks").
 @import "variables_mixins";
 
 $mossley-primary: #28a9e1;
@@ -245,7 +245,7 @@ body {
 	}
 }
 
-.hero {
+[data-scope="hero"][data-part="root"] {
 	background-image:
 		url("hero-bg@1x.png"),
 		url("hero-bg@1x.png");
@@ -282,18 +282,19 @@ body {
 		}
 	}
 
-	p.allcaps,
-	&__divider {
-		display: none;
-	}
+}
 
-	h1 {
-		color: white;
-		font-family: $sans-serif;
-		font-weight: $bold;
-		margin-top: 3.5rem;
-		margin-bottom: 3.5rem;
-	}
+[data-scope="hero"][data-part="subtitle"],
+[data-scope="hero"][data-part="divider"] {
+	display: none;
+}
+
+[data-scope="hero"][data-part="title"] {
+	color: white;
+	font-family: $sans-serif;
+	font-weight: $bold;
+	margin-top: 3.5rem;
+	margin-bottom: 3.5rem;
 }
 
 .paginator {
@@ -315,13 +316,12 @@ body {
 	}
 }
 
-.event {
-	a {
-		color: $mossley-text;
-	}
+[data-scope="event"][data-part="root"] a {
+	color: $mossley-text;
 }
 
-.neighbourhood span {
+.neighbourhood span,
+[data-scope="event"][data-part="neighbourhood"] [data-scope="pill"][data-part="root"] {
 	background-color: $mossley-secondary;
 }
 

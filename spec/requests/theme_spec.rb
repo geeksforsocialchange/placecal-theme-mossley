@@ -73,17 +73,15 @@ RSpec.describe 'Mossley theme', type: :request do
     end
   end
 
-  # app/scss/mossley.scss hides the hero tagline with `.hero p.allcaps`, which
-  # names the element core's Components::Hero emits. Core moved that from an h4
-  # to a p once already (this repo needed b51e760 to catch up), and neither
-  # suite noticed. Assert the element so a second move fails loudly here rather
-  # than showing a duplicated tagline on every interior page.
+  # app/scss/mossley.scss hides the hero tagline through core's hero subtitle
+  # part. Assert the part so a change in core fails loudly here rather than
+  # showing a duplicated tagline on every interior page.
   describe 'interior pages' do
     it 'renders the tagline in the element the theme stylesheet hides' do
       get 'http://mossley.lvh.me/events'
 
       expect(response).to have_http_status(:ok)
-      expect(response.parsed_body.at_css('.hero p.allcaps')&.text).to eq('Our town, all in one place')
+      expect(response.parsed_body.at_css('[data-scope="hero"][data-part="subtitle"]')&.text).to eq('Our town, all in one place')
     end
   end
 
