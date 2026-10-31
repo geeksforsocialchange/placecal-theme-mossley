@@ -302,7 +302,7 @@ body {
 		border-color: $mossley-secondary;
 	}
 
-	li.paginator__arrow {
+	li[data-scope="timeline"][data-part="arrow"] {
 		background-color: $mossley-secondary;
 	}
 
