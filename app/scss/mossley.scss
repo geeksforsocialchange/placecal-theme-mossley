@@ -49,7 +49,7 @@ body {
 }
 
 .h2--alt,
-.header__menu a,
+[data-scope="navigation"][data-part="menu"] a,
 .footer h2 {
 	text-transform: none;
 	letter-spacing: normal;
@@ -61,13 +61,13 @@ body {
 	font-size: 1.11111rem;
 }
 
-.header__menu a {
+[data-scope="navigation"][data-part="menu"] a {
 	@include for-tablet-portrait-up {
 		font-size: 1.22222rem;
 	}
 }
 
-.header {
+[data-scope="navigation"][data-part="root"] {
 	background-color: $mossley-primary;
 	padding-top: 1rem;
 
@@ -75,7 +75,7 @@ body {
 	// (mx-4 lg:mx-12), which exposes white bands of page background either
 	// side of Mossley's solid blue bar. Trade the margins for equivalent
 	// padding so the bar runs the full page width.
-	&.header__partner {
+	&[data-variant="site"] {
 		margin-inline: 0;
 		padding-inline: 1rem;
 
@@ -83,74 +83,70 @@ body {
 			padding-inline: 3rem;
 		}
 	}
+}
 
-	&__branding {
-		width: 180px;
-		height: 61px;
-		background-size: 180px 61px;
+[data-scope="navigation"][data-part="branding"] {
+	width: 180px;
+	height: 61px;
+	background-size: 180px 61px;
 
-		@include for-tablet-portrait-up {
-			width: 222px;
-			height: 75px;
-			background-size: 222px 75px;
+	@include for-tablet-portrait-up {
+		width: 222px;
+		height: 75px;
+		background-size: 222px 75px;
+	}
+}
+
+[data-scope="navigation"][data-part="menu"] {
+	margin-top: 0.5rem;
+
+	@include for-tablet-portrait-up {
+		margin-top: 1rem;
+	}
+
+	li {
+		background-color: $mossley-background;
+
+		@include for-phone-only {
+			border-bottom-color: $mossley-text-alt;
+
+			&:hover {
+				background-color: $mossley-primary-dark;
+			}
+		}
+
+		@include for-tablet-landscape-up {
+			background-color: transparent;
 		}
 	}
 
-	&__menu {
-		margin-top: 0.5rem;
+	a {
+		color: $mossley-primary-dark;
+
+		&:hover {
+			color: $mossley-text-alt;
+		}
 
 		@include for-tablet-portrait-up {
-			margin-top: 1rem;
-		}
+			&:hover,
+			&.active {
+				color: $mossley-primary-dark;
 
-		li {
-			background-color: $mossley-background;
-
-			@include for-phone-only {
-				border-bottom-color: $mossley-text-alt;
-
-				&.nav__item--last {
-					border-bottom-width: 0;
+				&:after {
+					border-color: $base-primary;
 				}
-
-				&:hover {
-					background-color: $mossley-primary-dark;
-				}
-			}
-
-			@include for-tablet-landscape-up {
-				background-color: transparent;
 			}
 		}
 
-		a {
-			color: $mossley-primary-dark;
+		@include for-tablet-landscape-up {
+			color: $mossley-text-alt;
 
-			&:hover {
-				color: $mossley-text-alt;
-			}
-
-			@include for-tablet-portrait-up {
-				&:hover,
-				&.active {
-					color: $mossley-primary-dark;
-
-					&:after {
-						border-color: $base-primary;
-					}
-				}
-			}
-
-			@include for-tablet-landscape-up {
+			&:hover,
+			&.active {
 				color: $mossley-text-alt;
 
-				&:hover,
-				&.active {
-					color: $mossley-text-alt;
-
-					&:after {
-						border-color: $mossley-secondary;
-					}
+				&:after {
+					border-color: $mossley-secondary;
 				}
 			}
 		}
@@ -222,28 +218,8 @@ body {
 		text-decoration-color: $mossley-secondary;
 	}
 
-	&__impressum {
-		color: $mossley-background;
-
-		a {
-			color: $mossley-background;
-		}
-	}
 }
 
-.svg {
-	&__background {
-		fill: $mossley-secondary;
-	}
-
-	&__primary {
-		fill: $mossley-text-alt;
-	}
-
-	&__secondary {
-		fill: $mossley-primary-dark;
-	}
-}
 
 [data-scope="hero"][data-part="root"] {
 	background-image:
