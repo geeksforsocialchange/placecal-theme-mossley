@@ -311,6 +311,21 @@ body {
 		background-color: $mossley-secondary;
 	}
 
+	// Core's timeline tabs are pills inside the li: colour the pill, and keep the li clear behind its rounded ends
+	li:has(> [data-scope="pill"]) {
+		background-color: transparent;
+	}
+
+	[data-scope="pill"] {
+		background-color: transparent;
+		border-color: $mossley-secondary;
+	}
+
+	[data-scope="pill"][aria-current],
+	[data-scope="pill"]:hover {
+		background-color: $mossley-secondary;
+	}
+
 	a {
 		color: $mossley-text-buttons;
 	}
