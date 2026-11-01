@@ -273,7 +273,7 @@ body {
 	margin-bottom: 3.5rem;
 }
 
-.paginator {
+:is([data-scope="event-index"][data-part="paginator"], [data-scope="partner-details"][data-part="paginator"]) {
 	li {
 		border-color: $mossley-secondary;
 	}
@@ -311,7 +311,7 @@ body {
 	color: $mossley-text;
 }
 
-.neighbourhood span,
+[data-scope="partner-preview"][data-part="neighbourhood"] span,
 [data-scope="event"][data-part="neighbourhood"] [data-scope="pill"][data-part="root"] {
 	background-color: $mossley-secondary;
 }
