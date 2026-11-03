@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # The Marvellous Mossley homepage, moved out of core (was
-# Views::Sites::Mossley). Same markup and same copy; the literals core carried
+# Views::Sites::Mossley). Same copy; the literals core carried
 # inline are now locale keys under mossley.*, and the share image ships with
 # this engine rather than with core.
 class Mossley::Views::Home < Views::Base
@@ -31,7 +31,7 @@ class Mossley::Views::Home < Views::Base
       div(class: 'hero_image--mossley')
     end
 
-    section(class: 'region region__title--mossley') do
+    section(class: 'region__title--mossley') do
       div(class: 'container-narrowish') do
         h1 { t('mossley.home.hero.heading') }
       end
@@ -39,12 +39,12 @@ class Mossley::Views::Home < Views::Base
   end
 
   def render_mission
-    section(class: 'region region__mission') do
+    section(class: 'mossley-mission') do
       div(class: 'container-narrow') do
         p { t('mossley.home.mission.groups') }
         p { t('mossley.home.mission.projects') }
         p { render_mission_links }
-        link_to t('mossley.home.mission.events_cta'), events_path, class: 'btn btn--lg btn--alt btn--mt'
+        link_to t('mossley.home.mission.events_cta'), events_path, class: 'mossley-button'
       end
     end
   end
@@ -64,11 +64,11 @@ class Mossley::Views::Home < Views::Base
   end
 
   def render_about
-    section(class: 'region region__management') do
-      div(class: 'title-strip') do
-        h2(class: 'h2--alt') { t('mossley.home.about.heading') }
+    section(class: 'mossley-about') do
+      div(class: 'mossley-about__heading') do
+        h2(class: 'mossley-about__title') { t('mossley.home.about.heading') }
       end
-      div(class: 'container-narrow first-ele-h3') do
+      div(class: 'container-narrow mossley-about__body') do
         p { t('mossley.home.about.join') }
         p { t('mossley.home.about.support') }
         raw safe(site.description_html.to_s)
@@ -78,16 +78,16 @@ class Mossley::Views::Home < Views::Base
   end
 
   def render_support
-    section(class: 'region region__support') do
+    section(class: 'mossley-support') do
       div(class: 'container-public') do
-        div(class: 'g') do
-          div(class: 'gi gi__1-3') do
+        div(class: 'mossley-support__grid') do
+          div do
             HelpCard(variant: :adding_events, site: site)
           end
-          div(class: 'gi gi__1-3') do
+          div do
             HelpCard(places: places_to_get_online, variant: :computer_access)
           end
-          div(class: 'gi gi__1-3') do
+          div do
             HelpCard(variant: :getting_help)
           end
         end
