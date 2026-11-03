@@ -42,7 +42,7 @@ RSpec.describe 'Mossley theme', type: :request do
       get 'http://mossley.lvh.me/'
 
       expect(response.body).to include('About Us')
-      expect(response.body).to include('region__support')
+      expect(response.body).to include('mossley-support')
     end
 
     # Core's layout appends the site name to any content_for(:title), so a

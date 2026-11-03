@@ -16,15 +16,13 @@ $mossley-text-buttons: #406618;
 
 $mossley-header-green: #3ab54a;
 
-// For some reason these are not interpolating properly
+// Core's colour tokens (core app/tailwind/public/_theme.css).
 :root {
-	--base-primary: #28a9e1;
-	--base-secondary: #f89520;
-	--base-background: #ffffff;
-	--base-rules: #bee7f6;
-	--base-text: #4a4a4a;
-	--base-tertiary: #f89520;
-	--base-map-stripe-second: #28a9e1;
+	--color-primary: #{$mossley-primary};
+	--color-secondary: #{$mossley-secondary};
+	--color-background: #{$mossley-text-alt};
+	--color-foreground: #{$mossley-text};
+	--color-rules: #{$mossley-background};
 }
 
 body {
@@ -48,7 +46,7 @@ body {
 	border-color: $mossley-primary;
 }
 
-.h2--alt,
+.mossley-about__title,
 [data-scope="navigation"][data-part="menu"] a,
 [data-scope="footer"][data-part="root"] h2 {
 	text-transform: none;
@@ -56,7 +54,7 @@ body {
 	font-weight: $bold;
 }
 
-.h2--alt,
+.mossley-about__title,
 [data-scope="footer"][data-part="root"] h2 {
 	font-size: 1.11111rem;
 }
@@ -179,17 +177,46 @@ body {
 	background-repeat: no-repeat;
 }
 
-.region__management {
+// The bottom bar kept core's beige while Mossley's rules turned blue.
+[data-scope="meta"][data-part="root"] {
+	--color-rules: #{$base-rules};
+}
+
+.mossley-mission {
+	background-color: $base-rules;
+	padding: 1rem 0;
+	margin-top: 1rem;
+	text-align: center;
+}
+
+.mossley-button,
+.mossley-support [data-scope="button"][data-part="root"] {
+	display: inline-block;
+	margin: 1rem 0 0.5rem;
+	padding: 0.4rem 1rem;
+	border: 3px solid $base-background;
+	border-radius: 3rem;
+	background-color: $mossley-secondary;
+	box-shadow: 0 0 0 2px $mossley-secondary;
+	color: $base-background;
+	font-weight: $bold;
+	text-align: center;
+	text-decoration: none;
+	transition: 0.3s;
+
+	&:hover {
+		color: $base-background;
+		background-color: $mossley-text;
+		box-shadow: 0 0 0 2px $mossley-text;
+		text-decoration: none;
+	}
+}
+
+.mossley-about {
 	background-color: $mossley-primary;
 	color: $mossley-text-alt;
-
-	h2 {
-		border-bottom-color: $mossley-secondary;
-	}
-
-	.title-strip {
-		background-color: transparent;
-	}
+	text-align: center;
+	padding-bottom: 1rem;
 
 	[data-scope="profile"][data-part="root"] {
 		color: $mossley-primary;
@@ -206,7 +233,55 @@ body {
 	}
 }
 
+.mossley-about__heading {
+	padding: 0.5rem 0;
+}
+
+.mossley-about__title {
+	display: inline-block;
+	padding-bottom: 0.5rem;
+	border-bottom: 3px solid $mossley-secondary;
+}
+
+.mossley-about__body > p:first-child {
+	font-size: $h3-size;
+	font-weight: $bold;
+	margin-top: 0;
+}
+
+.mossley-support {
+	margin-top: 3rem;
+
+	// The help cards draw their icons from these tokens.
+	svg {
+		--color-rules: #{$mossley-secondary};
+		--color-foreground: #{$mossley-primary-dark};
+		--color-secondary: #{$mossley-text-alt};
+	}
+
+	[data-scope="ruled-heading"][data-part="root"] {
+		text-transform: none;
+		letter-spacing: normal;
+		font-size: $base-font-size;
+	}
+}
+
+.mossley-support__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	column-gap: 1.11111rem;
+
+	@include for-tablet-portrait-up {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	@include for-tablet-landscape-up {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
 [data-scope="footer"][data-part="root"] {
+	--color-rules-dark: #{$mossley-background};
 	color: $mossley-text-alt;
 	background-color: $mossley-primary;
 
